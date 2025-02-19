@@ -20,7 +20,13 @@ class TemplateTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @IBOutlet weak var exerciseName: UILabel!
+    
+    @IBOutlet weak var nameOfExercise: UILabel!
+    @IBOutlet weak var previousReps: UILabel!
+    @IBOutlet weak var previousWeight: UILabel!
+    @IBOutlet weak var recordWeight: UILabel!
+    @IBOutlet weak var weightTextField: UITextField!
+    @IBOutlet weak var repsTextField: UITextField!
     
     
     

@@ -25,7 +25,14 @@ class exercisesViewController: UIViewController {
     
     var exercises: [exercise] = [
         exercise(name: "bench press"),
-        exercise(name: "incline bench press")
+        exercise(name: "incline bench press"),
+        exercise(name: "bicep curl"),
+        exercise(name: "deadlift"),
+        exercise(name: "lat pulldown"),
+        exercise(name: "overhead press"),
+        exercise(name: "squat"),
+        exercise(name: "tricep pushdown")
+        
         
         
     ]
