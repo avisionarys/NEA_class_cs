@@ -6,13 +6,24 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
+import Firebase
+import FirebaseDatabase
 
 
 
 
-class templateViewController: UIViewController, UITableViewDelegate , MyProtocol{
+class templateViewController: UIViewController, UITableViewDelegate , MyProtocol, customCellDelegate{
     
+    
+    
+    private let db = Firestore.firestore()
     @IBOutlet weak var tableView: UITableView!
+    
+    var weightText: String?
+    var repsText: String?
+    
     
     var Workouts: [String] = []
     
@@ -45,6 +56,48 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
     }
     
     
+    func didUpdateText(_ cell: TemplateTableViewCell, weight: String, reps: String) {
+        weightText = weight
+        repsText = reps
+            
+        
+    }
+    
+    
+    
+   
+    
+    func saveWorkout(weight:String, reps: String){
+        if let user = Auth.auth().currentUser {
+            let userID = user.uid
+            let workoutID  = UUID().uuidString
+            let workoutData: [String: Any] = [
+                "weight" : weight,
+                "reps" : reps
+            ]
+                
+                
+            self.db.collection("userdata").document(userID).collection(workoutID).addDocument(data:workoutData){ error in
+                if let error = error {
+                    print("Error saving workout data: \(error)")
+                } else {
+                    print("Workout data saved successfully!")
+                }
+            }
+        
+        }else {
+            print("No user is signed in.")
+        }
+    }
+  
+    @IBAction func finishedPressed(_ sender: UIBarButtonItem) {
+        guard let weight = weightText else {return}
+        guard let reps = repsText else {return}
+        saveWorkout(weight: weight, reps: reps)
+        dismiss(animated: true)
+  
+    }
+    
 
 }
     
@@ -56,6 +109,7 @@ extension templateViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellReused", for: indexPath) as!  TemplateTableViewCell
         cell.nameOfExercise.text = Workouts[indexPath.row]
+        cell.delegate = self
         return cell
     }
     

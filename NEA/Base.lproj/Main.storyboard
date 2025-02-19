@@ -379,7 +379,13 @@
                         <viewLayoutGuide key="safeArea" id="zL5-WI-uqe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="YKk-rJ-B8f"/>
+                    <navigationItem key="navigationItem" id="YKk-rJ-B8f">
+                        <barButtonItem key="rightBarButtonItem" title="finished" id="Cbq-bM-OWb">
+                            <connections>
+                                <action selector="finishedPressed:" destination="SBt-Dj-16N" id="KUL-dh-UCe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="exerciseTableView" destination="A9w-GW-KPk" id="Xdz-4K-QRE"/>
                         <outlet property="tableView" destination="A9w-GW-KPk" id="eAX-ur-v8V"/>
