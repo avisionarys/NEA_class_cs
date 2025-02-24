@@ -12,17 +12,34 @@ import Firebase
 import FirebaseDatabase
 
 
+protocol passingvaluesDelegate: AnyObject {
+    func passValues(data: String)
+}
 
 
-class templateViewController: UIViewController, UITableViewDelegate , MyProtocol, customCellDelegate{
+
+class templateViewController: UIViewController, UITableViewDelegate , MyProtocol,  /*,customCellDelegate*/passingvaluesDelegate{
+  
     
-    
+    var delegate:passingvaluesDelegate?
     
     private let db = Firestore.firestore()
     @IBOutlet weak var tableView: UITableView!
+
+   
+   
+    var saving: String?
     
-    var weightText: String?
-    var repsText: String?
+    func passValues(data: String) {
+        saving = data
+        print(saving ?? "no data")
+    }
+    
+    
+    
+    
+    /*var weightText: String?
+    var repsText: String?*/
     
     
     var Workouts: [String] = []
@@ -44,6 +61,8 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
         exerciseTableView.delegate = self
         
         tableView.register(UINib(nibName: "TemplateTableViewCell" , bundle: nil), forCellReuseIdentifier: "cellReused")
+        let templateVC = templateViewController()
+        templateVC.delegate = self
         
     }
     
@@ -56,18 +75,57 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
     }
     
     
-    func didUpdateText(_ cell: TemplateTableViewCell, weight: String, reps: String) {
-        weightText = weight
-        repsText = reps
+    func savingDatabase(savedData: String){
+        if let user = Auth.auth().currentUser {
+            let userID = user.uid
+            let workoutID  = UUID().uuidString
+            let workoutData: [String: Any] = [
+                "workout" : saving ?? "no text"
+            ]
             
+            self.db.collection("userdata").document(userID).collection("userWorkouts\(workoutID)").document("exerciseers").setData(workoutData) { error in
+                if let error = error {
+                    print("Error writing document: \(error)")
+                } else {
+                    print("Document successfully written!")
+                }
+            }
+            
+            
+            
+            
+        }else{
+            print("no use signed in")
+        }
+        
+    }
+    
+    
+   
+    @IBAction func saveWorkoutData(_ sender: UIBarButtonItem) {
+        print("test")
+        savingDatabase(savedData: saving ?? "no text")
+        print(saving ?? "no text")
+        print("not worked ")
+        
+
+        
         
     }
     
     
     
-   
     
-    func saveWorkout(weight:String, reps: String){
+    
+    
+    /* func didUpdateText(_ cell: TemplateTableViewCell, weight: String, reps: String) {
+        weightText = weight
+        repsText = reps
+            
+        
+    }*/
+    
+   /* func saveWorkout(weight:String, reps: String){
         if let user = Auth.auth().currentUser {
             let userID = user.uid
             let workoutID  = UUID().uuidString
@@ -98,6 +156,7 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
   
     }
     
+        */
 
 }
     
@@ -109,9 +168,14 @@ extension templateViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellReused", for: indexPath) as!  TemplateTableViewCell
         cell.nameOfExercise.text = Workouts[indexPath.row]
-        cell.delegate = self
+        /*cell.delegate = self*/
+        
+        let printing = String("Cell \(indexPath.row): nameOfExercise.text = \(cell.nameOfExercise.text ?? "No text"), weight = \(cell.weightTextField.text ?? "No text"). reps \(cell.repsTextField.text ?? "No text")")
+        
+        delegate?.passValues(data:printing)
         return cell
     }
+    
     
 }
 

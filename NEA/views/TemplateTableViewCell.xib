@@ -48,9 +48,6 @@
                                 <rect key="frame" x="249" y="9" width="67" height="83"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="weightfieldEdited:" destination="KGk-i7-Jjw" eventType="editingDidEnd" id="Plo-uu-oOh"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="reps" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BLK-Jz-A0n">
                                 <rect key="frame" x="348" y="9" width="62" height="83"/>

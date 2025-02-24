@@ -8,16 +8,16 @@
 import UIKit
 
 
-protocol customCellDelegate{
+/*protocol customCellDelegate{
     
     func didUpdateText(_ cell: TemplateTableViewCell, weight: String, reps:String)
-}
+}*/
 
 
 
 class TemplateTableViewCell: UITableViewCell {
     
-    var delegate: customCellDelegate?
+   /* var delegate: customCellDelegate?*/
     
  
     
@@ -42,12 +42,12 @@ class TemplateTableViewCell: UITableViewCell {
     
    
         
-    @IBAction func weightfieldEdited(_ sender: Any) {
+   /* @IBAction func weightfieldEdited(_ sender: Any) {
         
         guard let weight = weightTextField.text else { return }
         guard let reps = repsTextField.text else {return}
         delegate?.didUpdateText(self, weight: weight, reps: reps)
-    }
+    }*/
     
     
     

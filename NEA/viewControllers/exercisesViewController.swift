@@ -47,12 +47,7 @@ class exercisesViewController: UIViewController {
     }
     
    
-func senddata(){
-        
-        delegate?.addExercise(workout: selectedWorkout ?? "")
-        self.navigationController?.popViewController(animated: true)
-    }
-        
+
     
 
 }

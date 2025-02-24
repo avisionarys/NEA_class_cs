@@ -382,7 +382,7 @@
                     <navigationItem key="navigationItem" id="YKk-rJ-B8f">
                         <barButtonItem key="rightBarButtonItem" title="finished" id="Cbq-bM-OWb">
                             <connections>
-                                <action selector="finishedPressed:" destination="SBt-Dj-16N" id="KUL-dh-UCe"/>
+                                <action selector="saveWorkoutData:" destination="SBt-Dj-16N" id="MGm-ZQ-ysa"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -393,7 +393,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQp-tG-73e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3029.8507462686566" y="-14.416475972540045"/>
+            <point key="canvasLocation" x="3037" y="-17"/>
         </scene>
         <!--exercisesViewController-->
         <scene sceneID="0lb-TM-U6D">
