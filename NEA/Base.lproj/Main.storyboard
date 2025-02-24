@@ -382,7 +382,7 @@
                     <navigationItem key="navigationItem" id="YKk-rJ-B8f">
                         <barButtonItem key="rightBarButtonItem" title="finished" id="Cbq-bM-OWb">
                             <connections>
-                                <action selector="saveWorkoutData:" destination="SBt-Dj-16N" id="MGm-ZQ-ysa"/>
+                                <action selector="saveWorkoutData:" destination="SBt-Dj-16N" id="UOK-2C-B9n"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
