@@ -83,59 +83,60 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
     
     @IBOutlet weak var exerciseTableView: UITableView!
     
+    struct WorkoutData: Codable, Identifiable {
+        @DocumentID var id: String?
+        let exerciseName: String
+        let weight: String
+        let reps: String
+    }
+    
     
     @IBAction func saveWorkoutData(_ sender: UIBarButtonItem) {
-    
-        var dataForExercise: [String: Any] = [:]
+        
+        var dataForExercise: [WorkoutData] = []
         
         guard let visibleIndexPaths = tableView.indexPathsForVisibleRows else { return }
         
         for indexPath in visibleIndexPaths {
             if let cell = tableView.cellForRow(at: indexPath) as? TemplateTableViewCell{
-                let exerciseNames = cell.nameOfExercise.text ?? ""
+                let exerciseName = cell.nameOfExercise.text ?? ""
                 let weight = cell.weightTextField.text ?? ""
                 let reps = cell.repsTextField.text ?? ""
                 
-                
-                
-                let exerciseData: [String: Any] = [
-                    "exerciseName": exerciseNames,
-                    "weight": weight,
-                    "reps": reps
-                ]
-                
-                dataForExercise["exerciseName"] = exerciseNames
-                dataForExercise["weight"] = weight
-                dataForExercise["reps"] = reps
-            
+                let workoutData = WorkoutData(exerciseName: exerciseName, weight: weight, reps: reps)
+                dataForExercise.append(workoutData)
             }
             
-            
         }
-     
-  
         saveToFirestore(data: dataForExercise)
         
-        func saveToFirestore(data: [String: Any]) {
+        func saveToFirestore(data: [WorkoutData]) {
             if let user = Auth.auth().currentUser {
                 let userID = user.uid
                 let workoutID  = UUID().uuidString
-                    
-                self.db.collection("userdataSaved").document(userID).collection("userWorkouts\(workoutID)").document("exercise").setData(data) { error in
-                    if let error = error {
-                        print("Error writing document: \(error)")
-                    } else {
-                        print("Document successfully written!")
-                    }
-                }
-            }else{
-                print("no use signed in")
-            }
+                let userDocRef = db.collection("userdataRef").document(userID)
+                let username = Auth.auth().currentUser?.email ?? "No username"
+                let userDocuemntData = userDocRef.collection(username).document(workoutID)
                 
+                for workoutData in dataForExercise {
+                    do{
+                        try userDocuemntData.setData(from: workoutData)
+                        print("workout data saved successfully")
+                    }catch{
+                        print("error saving workout data: \(error)")
+                    }
+                 
+                }
+            }else {
+                print("No user signed in")
+            }
+            
+            
+            
+            
+            
+            
         }
-            
-            
-            
     }
 }
             
@@ -147,7 +148,6 @@ extension templateViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellReused", for: indexPath) as!  TemplateTableViewCell
         cell.nameOfExercise.text = Workouts[indexPath.row]
-        /*cell.delegate = self*/
         
         let printing = String("Cell \(indexPath.row): nameOfExercise.text = \(cell.nameOfExercise.text ?? "No text"), weight = \(cell.weightTextField.text ?? "No text"). reps \(cell.repsTextField.text ?? "No text")")
         
