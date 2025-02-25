@@ -49,38 +49,12 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
     
     
     
-    
     func addExercise(workout: String){
         Workouts.append(workout)
         exerciseTableView.reloadData()
     }
     
-    
-    /*func savingDatabase(savedData: String){
-     if let user = Auth.auth().currentUser {
-     let userID = user.uid
-     let workoutID  = UUID().uuidString
-     let workoutData: [String: Any] = [
-     "workout" : "stringsting"
-     ]
-     
-     self.db.collection("userdata").document(userID).collection("userWorkouts\(workoutID)").document("exerciseers").setData(workoutData) { error in
-     if let error = error {
-     print("Error writing document: \(error)")
-     } else {
-     print("Document successfully written!")
-     }
-     }
-     
-     
-     
-     
-     }else{
-     print("no use signed in")
-     }
-     
-     }*/
-    
+        
     @IBOutlet weak var exerciseTableView: UITableView!
     
     struct WorkoutData: Codable, Identifiable {
@@ -124,6 +98,14 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
                     do{
                         try userDocuemntData.collection("exercises").addDocument(from: workoutData)
                         print("workout data saved successfully")
+                        if let viewControllers = navigationController?.viewControllers {
+                                for viewController in viewControllers {
+                                    if viewController is homeViewController{
+                                        navigationController?.popToViewController(viewController, animated: true)
+                                        return
+                                    }
+                                }
+                            }
                     }catch{
                         print("error saving workout data: \(error)")
                     }
