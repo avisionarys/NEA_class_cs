@@ -95,51 +95,47 @@ class templateViewController: UIViewController, UITableViewDelegate , MyProtocol
         
         var dataForExercise: [WorkoutData] = []
         
-        guard let visibleIndexPaths = tableView.indexPathsForVisibleRows else { return }
         
-        for indexPath in visibleIndexPaths {
-            if let cell = tableView.cellForRow(at: indexPath) as? TemplateTableViewCell{
-                let exerciseName = cell.nameOfExercise.text ?? ""
-                let weight = cell.weightTextField.text ?? ""
-                let reps = cell.repsTextField.text ?? ""
-                
-                let workoutData = WorkoutData(exerciseName: exerciseName, weight: weight, reps: reps)
-                dataForExercise.append(workoutData)
-            }
+        
+        for i in 0..<tableView.numberOfRows(inSection: 0) {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: i, section: 0)) as? TemplateTableViewCell else { continue }
+            let exerciseName = cell.nameOfExercise.text ?? ""
+            let weight = cell.weightTextField.text ?? ""
+            let reps = cell.repsTextField.text ?? ""
+            
+            let workoutData = WorkoutData(exerciseName: exerciseName, weight: weight, reps: reps)
+            dataForExercise.append(workoutData)
+            
             
         }
+        
         saveToFirestore(data: dataForExercise)
+        
         
         func saveToFirestore(data: [WorkoutData]) {
             if let user = Auth.auth().currentUser {
                 let userID = user.uid
                 let workoutID  = UUID().uuidString
-                let userDocRef = db.collection("userdataRef").document(userID)
+                let userDocRef = db.collection("userdataRerferance").document(userID)
                 let username = Auth.auth().currentUser?.email ?? "No username"
                 let userDocuemntData = userDocRef.collection(username).document(workoutID)
                 
-                for workoutData in dataForExercise {
+                for workoutData in data {
                     do{
-                        try userDocuemntData.setData(from: workoutData)
+                        try userDocuemntData.collection("exercises").addDocument(from: workoutData)
                         print("workout data saved successfully")
                     }catch{
                         print("error saving workout data: \(error)")
                     }
-                 
+                    
                 }
             }else {
                 print("No user signed in")
             }
             
-            
-            
-            
-            
-            
         }
     }
 }
-            
 extension templateViewController: UITableViewDataSource {
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
          return Workouts.count
